@@ -23,6 +23,7 @@ test.describe("Abc", async () => {
         // click đăng nhập bằng admin
         //await page.getByText("Đăng nhập với tư cách Quản trị viên").locator(xpath.btnDangnhap).click();
         await page.getByRole('button', { name: 'Đăng nhập với tư cách Quản trị viên' }).click();
+        await page.waitForTimeout(500); // đợi 500ms
 
         // đăng nhập tk admin
 
@@ -32,29 +33,35 @@ test.describe("Abc", async () => {
         await page.getByPlaceholder('Mật khẩu').pressSequentially('1', {delay:100});
 
         await page.getByRole('button', {name: 'Đăng nhập'}).click();
+        await page.waitForTimeout(500); // đợi 500ms
     });
 
     test("TC_01:  ", async ({page}) => {
         // click vào danh sách câu hỏi
         await page.getByRole("link", {name: "Danh sách câu hỏi"}).click();
+        await page.waitForTimeout(500); // đợi 500ms
 
         // click vào nút thêm mới
         await page.getByRole('button', {name: 'Thêm mới'}).click();
+        await page.waitForTimeout(500); // đợi 500ms
 
         // nhập câu hỏi
-        await page.locator(xpath.inputQuestion).fill("Câu hỏi");
+        await page.locator(xpath.inputQuestion).pressSequentially("Câu hỏi", {delay:100});
 
         // nhập đáp án
-        await page.getByPlaceholder('Đáp án 1').fill("A");
+        await page.getByPlaceholder('Đáp án 1').pressSequentially("A", {delay:100});
         await page.getByRole('button', {name: 'Thêm đáp án'}).click();
+        await page.waitForTimeout(500); // đợi 500ms
 
-        await page.getByPlaceholder('Đáp án 2').fill("B");
+        await page.getByPlaceholder('Đáp án 2').pressSequentially("B", {delay:100});
         await page.getByRole('button', {name: "Thêm đáp án"}).click();
+        await page.waitForTimeout(500); // đợi 500ms
 
-        await page.getByPlaceholder("Đáp án 3").fill("C");
+        await page.getByPlaceholder("Đáp án 3").pressSequentially("C", {delay:100});
         await page.getByRole('button', {name: "Thêm đáp án"}).click();
+        await page.waitForTimeout(500); // đợi 500ms
 
-        await page.getByPlaceholder("Đáp án 4").fill("D");
+        await page.getByPlaceholder("Đáp án 4").pressSequentially("D", {delay:100});
 
         await page.locator(xpath.radioBtn).check();
 
