@@ -23,7 +23,8 @@ test.describe("Trang chủ", async () => {
             pickKnowledgeType: '//div[@title="Cơ khí"]',
             pickWorkerLevel: '//div[@title="Thợ cấp 2"]',
 
-            dataChart: '//div[@data-chart-source-type = "Ant Design Charts"]'
+            dataChart: '//div[@data-chart-source-type = "Ant Design Charts"]',
+            examTable: 'xpath=/html/body/div/div/div[2]/div/main/div/div/div[8]/div/div/div/div/div/table',
         };
     });
 
@@ -76,9 +77,8 @@ test.describe("Trang chủ", async () => {
         });
 
         await test.step("Kiểm tra hiển thị bảng kỳ thi", async () => {
-            // kiểm tra bảng thống kê
-            const table = page.locator('table.ant-table');
-            await expect(table).toBeVisible();
+            // kiểm tra hiển thị bảng kỳ thi
+            await expect(page.locator(xpath.examTable)).toBeVisible();
         });
     });
 });

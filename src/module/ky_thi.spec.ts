@@ -11,26 +11,33 @@ test.describe("Kỳ thi", async () => {
 
     test.beforeAll(async () => {
         xpath= {
-            inputSearchExam: '//input[@id="search"]',
+            inputSearchExam: '//input[@id="exam_search"]',
 
-            datetimepickcreatedAt: '//input[@id = "createdAt"]',
+            datetimepickcreatedAt: '//input[@id = "create_time"]',
             buttonPreviousMonth1: 'xpath=/html/body/div[2]/div/div/div[2]/div/div/div/div[1]/div/div[1]/button[2]',
             inputStartDaterange1: '//td[@title="2025-05-15"]',
             inputEndDaterange1: '//td[@title="2025-05-16"]',
 
-            datetimepickstartAt: '//input[@id = "startAt"]',
+            datetimepickstartAt: '//input[@id = "start_time"]',
             buttonPreviousMonth2:'xpath=/html/body/div[3]/div/div/div[2]/div/div/div/div[1]/div/div[1]/button[2]',
             //inputStartDaterange2: '//td[@title="2025-05-16"]',
             inputStartDaterange2:'xpath=/html/body/div[3]/div/div/div[2]/div/div/div/div[1]/div/div[2]/table/tbody/tr[3]/td[6]',
             //inputEndDaterange2: '//td[@title="2025-05-20"]',
             inputEndDaterange2:'xpath=/html/body/div[3]/div/div/div[2]/div/div/div/div[1]/div/div[2]/table/tbody/tr[4]/td[3]',
 
-            btnCompletedStatus: 'xpath=/html/body/div[1]/div/div[2]/div/main/div/div[1]/div/form/div[4]/div/div/div[2]/div/div/div/label[3]',
+            btnCompletedStatus: 'xpath=/html/body/div/div/div[2]/div/main/div/div[1]/div/form/div[4]/div/div/div/div/div/label[3]',
 
-            btnAddNewExam: '//button["btn_add_new_exam"]',
+            btnAddNewExam: '//button[@id="btn_add_new_exam"]',
             inputAddExamName: '//input[@id="input_exam_name"]',
             inputAddExamDescription: '//textarea[@id="description"]',
             inputAddExamDuration: '//input[@id="duration"]',
+            inputGeneralQuestion: '//input[@id="generalQuestion"]',
+            inputSpecificQuestion: '//input[@id="specificQuestion"]',
+
+            btnSaveNewExam: '//button[@id="save_exam"]',
+            btnSelectAllCandidate: '//input[@aria-label="Select all"]',
+            btnSaveCandidate: 'xpath=/html/body/div[1]/div/div[2]/div/main/div/div/div[2]/div[1]/div[1]/div/div/button',
+            listCandidate: 'xpath=/html/body/div[1]/div/div[2]/div/main/div/div/div[2]/div[2]/div[2]/div/div/div/div/div/table/tbody',
         };
     });
 
@@ -98,6 +105,34 @@ test.describe("Kỳ thi", async () => {
 
             // nhập tên kỳ thi
             await page.locator(xpath.inputAddExamName).fill("Kỳ thi 100");
+
+            // nhập số câu hỏi kiến thức chung
+            await page.locator(xpath.inputGeneralQuestion).fill("10");
+
+            // nhập số câu hỏi kiến thức ngành
+            await page.locator(xpath.inputSpecificQuestion).fill("10");
+
+            // lưu kỳ thi
+            await page.locator(xpath.btnSaveNewExam).click();
+        });
+
+        await test.step("Kiểm tra thêm danh sách thí sinh", async () => {
+            // thêm danh sách thí sinh
+            await page.locator(xpath.btnSelectAllCandidate).click();
+
+            // lưu danh sách thí sinh
+            await page.locator(xpath.btnSaveCandidate).click();
+
+            // Kiểm tra hiển thị danh sách thí sinh
+            const candidateList = page.locator(xpath.listCandidate);
+            await expect(candidateList).toBeVisible();
+
+            // Click ra trang chủ kỳ thi
+            await page.getByRole('link', {name: 'Kỳ thi'}).click();
+
+            // Kiểm tra hiển thị danh sách kỳ thi
+            const firstRow1 = page.locator('tbody.ant-table-tbody tr').first();
+            await expect(firstRow1).toContainText("Kỳ thi 100");
         });
     });
 });
